@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Nykra — Sign in</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Mulish:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #FBF4E8;
+    --panel: #FFFFFF;
+    --ink: #2A1810;
+    --gold: #B8872B;
+    --maroon: #6B1E23;
+    --muted: #8C7A66;
+    --line: #E4D6BE;
+    --error: #A6332E;
+    color-scheme: light;
+    box-sizing: border-box;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #1C140E; --panel: #241A12; --ink: #F2E6D4; --gold: #D6AC5C;
+      --maroon: #D98087; --muted: #B5A289; --line: #3A2C1E; --error: #E8897F;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #1C140E; --panel: #241A12; --ink: #F2E6D4; --gold: #D6AC5C;
+    --maroon: #D98087; --muted: #B5A289; --line: #3A2C1E; --error: #E8897F;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; }
+  body {
+    background: var(--bg); color: var(--ink);
+    font-family: "Mulish", -apple-system, sans-serif;
+    display: flex; align-items: center; justify-content: center;
+    min-height: 100%; padding: 24px;
+  }
+  h1, .logo { font-family: "Marcellus", Georgia, serif; font-weight: 400; }
+
+  .stage { width: 100%; max-width: 380px; }
+  .logo { text-align: center; font-size: 24px; letter-spacing: 0.04em; color: var(--maroon); margin-bottom: 26px; }
+
+  .panel {
+    background: var(--panel); border: 1px solid var(--line); border-radius: 2px;
+    padding: 36px 32px 30px;
+  }
+  h1 { font-size: 21px; margin: 0 0 6px; }
+  .sub { font-size: 13.5px; color: var(--muted); margin: 0 0 26px; line-height: 1.55; }
+
+  form { display: flex; flex-direction: column; gap: 16px; }
+  .field { display: flex; flex-direction: column; gap: 6px; }
+  label { font-size: 12.5px; letter-spacing: 0.03em; color: var(--muted); }
+
+  .input-row { position: relative; display: flex; align-items: center; }
+  input[type="text"], input[type="password"], input[type="email"] {
+    width: 100%; background: var(--bg); border: 1px solid var(--line); border-radius: 2px;
+    padding: 11px 12px; font-family: "Mulish", sans-serif; font-size: 14.5px;
+    color: var(--ink); outline: none; transition: border-color 0.15s ease;
+  }
+  input::placeholder { color: var(--muted); opacity: 0.7; }
+  input:focus { border-color: var(--gold); }
+
+  .toggle-pw {
+    position: absolute; right: 10px; background: none; border: none; color: var(--muted);
+    font-size: 12px; cursor: pointer; padding: 4px 6px; font-family: "Mulish", sans-serif;
+  }
+  .toggle-pw:hover { color: var(--ink); }
+  .toggle-pw:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; border-radius: 2px; }
+
+  .row-between { display: flex; justify-content: space-between; align-items: center; font-size: 12.5px; }
+  .row-between a { color: var(--maroon); text-decoration: none; }
+  .row-between a:hover { text-decoration: underline; }
+  .remember { display: flex; align-items: center; gap: 7px; color: var(--muted); }
+  .remember input { accent-color: var(--maroon); }
+
+  button[type="submit"] {
+    margin-top: 6px; background: var(--maroon); color: #FBF4E8; border: none; border-radius: 2px;
+    padding: 12px; font-size: 14px; letter-spacing: 0.03em; font-weight: 600;
+    cursor: pointer; transition: opacity 0.15s ease; font-family: "Mulish", sans-serif;
+  }
+  button[type="submit"]:hover { opacity: 0.92; }
+  button[type="submit"]:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+  button[type="submit"]:active { transform: translateY(1px); }
+
+  .error { font-size: 12.5px; color: var(--error); min-height: 16px; margin: -4px 0 0; }
+
+  .foot { text-align: center; font-size: 13px; color: var(--muted); margin-top: 22px; }
+  .foot a { color: var(--maroon); text-decoration: none; }
+  .foot a:hover { text-decoration: underline; }
+
+  .divider {
+    display: flex; align-items: center; gap: 10px; margin: 22px 0 16px;
+    color: var(--muted); font-size: 11.5px; letter-spacing: 0.08em;
+    cursor: pointer; background: none; border: none; width: 100%;
+    font-family: "Mulish", sans-serif; padding: 0;
+  }
+  .divider:hover { color: var(--ink); }
+  .divider:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+  .divider .arrow { transition: transform 0.15s ease; }
+  .divider.open .arrow { transform: rotate(90deg); }
+  .divider::before, .divider::after { content: ""; flex: 1; height: 1px; background: var(--line); }
+
+  .result {
+    font-size: 13px; border: 1px solid var(--line); border-radius: 2px;
+    padding: 14px 16px; background: var(--bg); display: none;
+  }
+  .result.show { display: block; }
+  .result-title { color: var(--muted); font-size: 11.5px; letter-spacing: 0.03em; margin-bottom: 8px; }
+  .result-row { display: flex; justify-content: space-between; gap: 12px; padding: 4px 0; }
+  .result-row span:first-child { color: var(--muted); }
+  .result-row span:last-child {
+    word-break: break-all; text-align: right;
+    font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 12.5px;
+  }
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="logo">Nykra</div>
+  <div class="panel">
+    <h1>Welcome back</h1>
+    <p class="sub">Sign in to track orders, save pieces to your wishlist, and check out faster.</p>
+
+    <form id="loginForm" novalidate>
+      <div class="field">
+        <label for="email">Email</label>
+        <div class="input-row">
+          <input type="email" id="email" name="email" placeholder="you@example.com" autocomplete="email">
+        </div>
+      </div>
+      <div class="field">
+        <label for="password">Password</label>
+        <div class="input-row">
+          <input type="password" id="password" name="password" placeholder="••••••••" autocomplete="current-password">
+          <button type="button" class="toggle-pw" id="togglePw" aria-label="Show password">Show</button>
+        </div>
+      </div>
+      <div class="row-between">
+        <label class="remember"><input type="checkbox"> Remember me</label>
+        <a href="#">Forgot password?</a>
+      </div>
+      <p class="error" id="formError"></p>
+      <button type="submit">Sign in</button>
+    </form>
+
+    <button type="button" class="divider" id="resultToggle" aria-expanded="false" aria-controls="result">
+      <span class="arrow">›</span> 提交的信息
+    </button>
+    <div class="result" id="result">
+      <div class="result-title">仅在此处显示 — 不会发送或存储任何内容</div>
+      <div class="result-row"><span>邮箱</span><span id="outEmail">—</span></div>
+      <div class="result-row"><span>密码</span><span id="outPass">—</span></div>
+    </div>
+  </div>
+  <p class="foot">New to Nykra? <a href="#">Create an account</a></p>
+</div>
+
+<script>
+  const form = document.getElementById('loginForm');
+  const emailInput = document.getElementById('email');
+  const passInput = document.getElementById('password');
+  const togglePw = document.getElementById('togglePw');
+  const formError = document.getElementById('formError');
+  const result = document.getElementById('result');
+  const outEmail = document.getElementById('outEmail');
+  const outPass = document.getElementById('outPass');
+  const resultToggle = document.getElementById('resultToggle');
+  let hasSubmitted = false;
+
+  resultToggle.addEventListener('click', () => {
+    if (!hasSubmitted) return;
+    const isOpen = result.classList.toggle('show');
+    resultToggle.classList.toggle('open', isOpen);
+    resultToggle.setAttribute('aria-expanded', String(isOpen));
+  });
+
+  togglePw.addEventListener('click', () => {
+    const isPw = passInput.type === 'password';
+    passInput.type = isPw ? 'text' : 'password';
+    togglePw.textContent = isPw ? 'Hide' : 'Show';
+    togglePw.setAttribute('aria-label', isPw ? 'Hide password' : 'Show password');
+  });
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    if (!emailInput.value.trim() || !passInput.value) {
+      formError.textContent = 'Enter both your email and password.';
+      return;
+    }
+    formError.textContent = '';
+    outEmail.textContent = emailInput.value.trim();
+    outPass.textContent = passInput.value;
+    hasSubmitted = true;
+    result.classList.add('show');
+    resultToggle.classList.add('open');
+    resultToggle.setAttribute('aria-expanded', 'true');
+  });
+</script>
+</body>
+</html>
